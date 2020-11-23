@@ -1,0 +1,27 @@
+service: gpc-api
+app: gpc-api-app
+org: joerattapis
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-2
+  iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - dynamodb:PutItem
+      - SES:*
+    Resource: "arn:aws:dynamodb:us-east-1:*:table/users" 
+
+functions:
+  createUser:
+    handler: handler.handler
+    events:
+      - http:
+          path: /user
+          method: post
+          cors: true
